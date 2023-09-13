@@ -22,5 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/1/{env}/yrbss/questions/', [RiskyBehaviorAPI::class, 'getQuestions']);
 
-Route::get('/1/{env}/yrbss/responses/', [RiskyBehaviorAPI::class, 'getResponses']);
+Route::get('/1/{env}/yrbss/questions/{id}', [RiskyBehaviorAPI::class, 'getQuestion']);
+
 

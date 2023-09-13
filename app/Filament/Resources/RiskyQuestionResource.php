@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextArea;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 
 
 class RiskyQuestionResource extends Resource
@@ -37,7 +38,12 @@ class RiskyQuestionResource extends Resource
                 TextInput::make('question'),
                 TextArea::make('explanation'),
                 TextInput::make('source_url')->url(),
-                TextArea::make('source_notes')
+                TextArea::make('source_notes'),
+                Select::make('publication_status')->label('Status')->options([
+                    'draft' => 'Draft',
+                    'staging' => 'Staging',
+                    'production' => 'Production'
+                ])
             ]);
     }
 

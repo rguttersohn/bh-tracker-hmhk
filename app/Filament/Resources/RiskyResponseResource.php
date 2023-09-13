@@ -21,6 +21,9 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Support\Enums\ActionSize;
+use App\Filament\Resources\Collection;
+use Filament\Tables\Actions\BulkActionGroup;
+
 
 class RiskyResponseResource extends Resource
 {
@@ -106,6 +109,32 @@ class RiskyResponseResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkActionGroup::make([
+                        Tables\Actions\BulkAction::make('Draft')
+                        ->action(function($records){
+                            $records->each(function($record){
+                                $record->publication_status = 'draft';
+                                $record->save();
+                            });
+                        })->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    Tables\Actions\BulkAction::make('Staging')
+                    ->action(function($records){
+                        $records->each(function($record){
+                            $record->publication_status = 'staging';
+                            $record->save();
+                        });
+                    })->requiresConfirmation()
+                    ->deselectRecordsAfterCompletion(),
+                    Tables\Actions\BulkAction::make('Production')
+                    ->action(function($records){
+                        $records->each(function($record){
+                            $record->publication_status = 'production';
+                            $record->save();
+                        });
+                    })->requiresConfirmation()
+                    ->deselectRecordsAfterCompletion(),
+                    ])->button()->label('Change Status')->icon('heroicon-o-bars-3')->color('success'),
                     
                 ]),
             ])
