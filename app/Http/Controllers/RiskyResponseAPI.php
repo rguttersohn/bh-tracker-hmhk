@@ -9,7 +9,7 @@ class RiskyResponseAPI extends Controller
 {
     protected array $responses_select_list = ['rr.id','rr.year', 'rr.data','gender_constraints.label as gender', 'race_constraints.label as race', 'sexual_id_constraints.label as sexual_id', 'grade_constraints.label as grade'];
 
-    protected array $allowed_filters = ['year' => 'year',  'grade_constraints.slug' => 'grade', 'race_constraints.slug' => 'race','sexual_id_constraints.slug' => 'sexual_id', 'gender' => 'gender'];
+    protected array $allowed_filters = ['year' => 'year',  'grade_constraints.slug' => 'grade', 'race_constraints.slug' => 'race','sexual_id_constraints.slug' => 'sexual_id', 'gender_constraints.slug' => 'sex'];
 
 
 
