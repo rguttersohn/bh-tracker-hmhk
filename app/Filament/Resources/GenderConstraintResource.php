@@ -29,7 +29,8 @@ class GenderConstraintResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make('slug'),
+                TextInput::make('label')
             ]);
     }
 

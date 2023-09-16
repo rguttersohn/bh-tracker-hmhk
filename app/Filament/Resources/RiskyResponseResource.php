@@ -51,7 +51,8 @@ class RiskyResponseResource extends Resource
                     'draft' => 'Draft',
                     'staging' => 'Staging',
                     'production' => 'Production'
-                ])
+                ]),
+                Select::make('grade_constraints')->label('Grade')->relationship('grade_constraint', 'label')
 
             ]);
     }
@@ -66,7 +67,8 @@ class RiskyResponseResource extends Resource
                 TextColumn::make('race_constraint.label')->label('Race'),
                 TextColumn::make('sexual_id_constraint.label')->label('Sexual ID'),
                 TextColumn::make('gender_constraint.label')->label('Gender'),
-                TextColumn::make('publication_status')->label('status')
+                TextColumn::make('grade_constraint.label')->label('Grade'),
+                TextColumn::make('publication_status')->label('Status'),
 
             ])
             ->filters([
