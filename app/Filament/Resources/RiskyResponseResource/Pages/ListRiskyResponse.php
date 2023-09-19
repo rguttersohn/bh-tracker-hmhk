@@ -25,7 +25,6 @@ class ListRiskyResponse extends ListRecords
                     ImportField::make('race_constraint_id')->required(),
                     ImportField::make('sexual_id_constraint_id')->required(),
                     ImportField::make('gender_constraint_id')->required(),
-                    ImportField::make('grade_constraint_id')->required()
                 ])
 
         ];
