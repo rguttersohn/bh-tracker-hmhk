@@ -63,29 +63,6 @@ class DatabaseSeeder extends Seeder
             ],
             ]);
 
-        DB::table('grade_constraints')->insert([
-            [
-                'slug' => 'all',
-                'label' => 'All'
-            ],
-            [
-                'slug' => '9',
-                'label' => '9th Grade'
-            ],
-            [
-                'slug' => '10',
-                'label' => '10th Grade'
-            ],
-            [
-                'slug' => '11',
-                'label' => '11th Grade'
-            ],
-            [
-                'slug' => '12',
-                'label' => '12th Grade'
-            ],
-            ]);
-
         DB::table('sexual_id_constraints')->insert([
             [
                 'slug' => 'total',
@@ -112,7 +89,6 @@ class DatabaseSeeder extends Seeder
                 'label' => 'Other/Questioning'
             ]
             ]);
-
 
     }
 }
