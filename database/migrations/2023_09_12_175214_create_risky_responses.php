@@ -24,7 +24,6 @@ return new class extends Migration
             $table->foreignId('gender_constraint_id')->nullable()->constrained();
             $table->foreignId('sexual_id_constraint_id')->nullable()->constrained();
             $table->foreignId('race_constraint_id')->nullable()->constrained();
-            $table->foreignID('grade_constraint_id')->nullable()->constrainted();
             $table->text('publication_status');
            
         });
