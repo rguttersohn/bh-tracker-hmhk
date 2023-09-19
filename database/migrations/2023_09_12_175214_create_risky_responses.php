@@ -18,8 +18,8 @@ return new class extends Migration
         Schema::create('risky_responses', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('year');
-            $table->float('data');
+            $table->integer('year')->index();
+            $table->float('data')->index();
             $table->foreignId('risky_question_id')->constrained();
             $table->foreignId('gender_constraint_id')->nullable()->constrained();
             $table->foreignId('sexual_id_constraint_id')->nullable()->constrained();
@@ -37,8 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('risky_responses');
         DB::statement('ALTER TABLE risky_responses DROP CHECK check_rr_publication_status');
-
+        Schema::dropIfExists('risky_responses');
     }
 };

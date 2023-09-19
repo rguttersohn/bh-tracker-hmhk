@@ -7,7 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 class RiskyResponseAPI extends Controller
 {
-    protected array $selections = ['rr.id','rr.year', 'rr.data','gender_constraints.label as gender', 'race_constraints.label as race', 'sexual_id_constraints.label as sexual_id', 'grade_constraints.label as grade'];
+    protected array $selections = [
+        'rr.id',
+        'rr.year', 
+        'rr.data',
+        'gender_constraints.label as gender', 
+        'race_constraints.label as race', 
+        'sexual_id_constraints.label as sexual_id', 
+        'grade_constraints.label as grade'
+    ];
 
     /** bind  query params to column 
      * key is query param

@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('risky_questions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->text('slug');
             $table->text('question');
             $table->text('explanation')->nullable();
             $table->text('source_url')->nullable();
@@ -24,8 +23,6 @@ return new class extends Migration
         });
 
         DB::statement('ALTER TABLE risky_questions ADD CONSTRAINT check_rq_publication_status CHECK( publication_status = "draft" OR  publication_status = "staging" OR publication_status = "production")');
-
-
     }
 
     /**
@@ -33,7 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('risky_questions');
         DB::statement('ALTER TABLE risky_questions DROP CHECK check_rq_publication_status');
+        Schema::dropIfExists('risky_questions');
     }
 };

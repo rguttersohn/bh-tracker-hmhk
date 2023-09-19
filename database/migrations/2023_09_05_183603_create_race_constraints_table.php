@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('race_constraints', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->text('slug');
+            $table->string('slug', 100)->unique();
             $table->text('label');
             $table->text('explanation')->nullable();
         });
