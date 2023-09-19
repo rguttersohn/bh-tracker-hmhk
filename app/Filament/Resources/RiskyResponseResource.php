@@ -52,7 +52,6 @@ class RiskyResponseResource extends Resource
                     'staging' => 'Staging',
                     'production' => 'Production'
                 ]),
-                Select::make('grade_constraints')->label('Grade')->relationship('grade_constraint', 'label')
 
             ]);
     }
