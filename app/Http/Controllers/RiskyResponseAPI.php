@@ -14,83 +14,144 @@ class RiskyResponseAPI extends Controller
      * value is the associated column
     */
 
+    public function __construct(Request $request)
+    {   
+        /**run these methods on instantiation */
+
+        $this->setValidQueries($request->all());
+        $this->setFilters();
+        $this->setSort();
+    }
+
     protected array $allowed_queries = [
         'id' =>'rr.id', 
         'year' => 'year',  
         'grade' => 'grade_constraints.slug', 
         'race' => 'race_constraints.slug',
         'sexual_id' => 'sexual_id_constraints.slug', 
-        'gender_id' => 'gender_constraints.slug'
+        'sex' => 'gender_constraints.slug',
+        'sort_asc' => 'asc',
+        'sort_desc' => 'desc',
     ];
 
 
+    protected array $valid_queries = [];
 
-    protected function getValidQueries(array $queries):array {
+    protected array $filters = [];
+
+    protected array $sort = [];
+
+
+    /** 
+     * checks the url queries against the the allowed queriest list
+     */
+    protected function setValidQueries(array $queries):void {
         
-        $valid_queries = [];
         
         foreach($queries as $key => $value):
 
             if(isset($this->allowed_queries[$key])):
 
-                $valid_queries[$key] = $value;
+                $this->valid_queries[$key] = $value;
             
             endif;
 
         endforeach;
 
-        return $valid_queries;
-
     }
 
-    protected function getFilters():array {
-        
-        global $request;
+    /**
+     * use getValidQueries to check the queries
+     * then check the queries to make sure they are filters and not a sort_desc or sort_asc queries.
+     * 
+     */
 
-        $validated_queries = $this->getValidQueries($request->all());
+    protected function setFilters():void {
         
-        $formatted_filters = [];
-
+        $validated_queries = $this->valid_queries;
+        
         foreach($validated_queries as $key => $value):
 
-            if(str_starts_with($key, 'sort_asc' || 'sort_desc')):
+            if(str_starts_with($key, 'sort_asc') || str_starts_with($key, 'sort_desc')):
                 
                 continue;
             
             endif;
 
-            array_push($formatted_filters, [$this->allowed_queries[$key], '=', $value]);
-        
-        endforeach;
+            array_push($this->filters, [$this->allowed_queries[$key], '=', $value]);
 
-        return $formatted_filters;
+          
+        endforeach;
 
     }
 
+    protected function getFilters():array{
+        return $this->filters;
+    }
 
-    protected function stagingResponsesQuery($id ):array{
+    protected function setSort():void {
+
+
+        $validated_queries = $this->valid_queries;
+        foreach($validated_queries as $key => $value):
+            if($key === "sort_desc" || $key === "sort_asc"):
+                
+                $this->sort['order_by'] = $value;
+
+                $this->sort['direction'] = $this->allowed_queries[$key]; 
+                
+            endif;
+
+            continue;
+            
+            
+        endforeach;
+
+    }
+
+    protected function getSort():array{
+        return $this->sort;
+    }
+
+    
+    protected function stagingResponsesQuery(string $id):array{
         
-        return DB::table('risky_responses as rr')
+        $query = DB::table('risky_responses as rr')
             ->where([['publication_status', '=', 'staging'], ['rr.risky_question_id', '=', $id], ... $this->getFilters()])
             ->orWhere([['publication_status', '=', 'production'], ['rr.risky_question_id', '=', $id], ... $this->getFilters()])
             ->join('gender_constraints', 'rr.gender_constraint_id', '=', 'gender_constraints.id')
             ->join('race_constraints', 'rr.race_constraint_id', '=', 'race_constraints.id')
             ->join('sexual_id_constraints', 'rr.sexual_id_constraint_id', '=', 'sexual_id_constraints.id')
             ->join('grade_constraints', 'rr.grade_constraint_id', '=', 'grade_constraints.id' )
-            ->select(...$this->selections)
-            ->get()->toArray();
+            ->select(...$this->selections);
+
+        if(!empty($this->getSort())):
+            
+            $query->orderBy($this->getSort()['order_by'], $this->getSort()['direction']);
+        
+        endif;
+          
+        return $query->get()->toArray();
     }
 
-    protected function productionResponsesQuery($id){
+    protected function productionResponsesQuery(string $id){
 
-        return DB::table('risky_responses as rr')
-            ->where([['publication_status', '=', 'production'], ['rr.risky_question_id', '=', $id], ['rr.year', '=', 1999]])
+        $query = DB::table('risky_responses as rr')
+            ->where([['publication_status', '=', 'production'], ['rr.risky_question_id', '=', $id], ... $this->getFilters()])
             ->join('gender_constraints', 'rr.gender_constraint_id', '=', 'gender_constraints.id')
             ->join('race_constraints', 'rr.race_constraint_id', '=', 'race_constraints.id')
             ->join('sexual_id_constraints', 'rr.sexual_id_constraint_id', '=', 'sexual_id_constraints.id')
             ->join('grade_constraints', 'rr.grade_constraint_id', '=', 'grade_constraints.id' )
-            ->select(...$this->selections)
-            ->get()->toArray();
+            ->select(...$this->selections);
+        
+        if(!empty($this->getSort())):
+        
+            $query->orderBy($this->getSort()['order_by'], $this->getSort()['direction']);
+        
+        endif;
+
+        return $query->get()->toArray();
+
     }
 
     public function getResponses( string $env, string $id):array {

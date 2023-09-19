@@ -11,7 +11,7 @@ class RiskyQuestionAPI extends Controller
 {
 
 
-    protected array $question_select_list = ['id','slug','question','explanation','source_url','source_notes'];
+    protected array $selection = ['id','slug','question','explanation','source_url','source_notes'];
 
 
     protected function getInvalidMessage($env):array{
@@ -23,7 +23,7 @@ class RiskyQuestionAPI extends Controller
     protected function stagingQuestionQuery(string $id):array {
 
         return DB::table('risky_questions')
-        ->select($this->question_select_list)
+        ->select($this->selection)
         ->where([['publication_status', '=', 'staging'],['id','=', $id]])
         ->orWhere([['publication_status', '=', 'production'],['id','=', $id]])
         ->get()->toArray();
@@ -33,7 +33,7 @@ class RiskyQuestionAPI extends Controller
     protected function productionQuestionQuery(string $id):array {
         
         return DB::table('risky_questions')
-        ->select($this->question_select_list)
+        ->select($this->selection)
         ->where([['publication_status', '=', 'production'],['id','=', $id]])
         ->get()->toArray();
 
@@ -41,7 +41,7 @@ class RiskyQuestionAPI extends Controller
 
     protected function stagingQuestionsQuery(): array {
         return DB::table('risky_questions as rs')
-        ->select(...$this->question_select_list)
+        ->select(...$this->selection)
         ->where('publication_status', '=', 'staging')
         ->orWhere('publication_status', '=', 'production')
         ->get()->toArray();
@@ -49,7 +49,7 @@ class RiskyQuestionAPI extends Controller
 
     protected function productionQuestionsQuery(): array {
         return DB::table('risky_questions as rs')
-        ->select(...$this->question_select_list)
+        ->select(...$this->selection)
         ->where('publication_status', '=', 'production')
         ->get()->toArray();
     }
@@ -66,7 +66,7 @@ class RiskyQuestionAPI extends Controller
     }
 
 
-    public function getQuestion(string $env, string $id):array{
+    public function getQuestion(string $env, string $id, Request $request):array{
 
         /** Determine the query to run based ont the env */
 
@@ -78,7 +78,7 @@ class RiskyQuestionAPI extends Controller
             
         return [
             'question' => $question_query,
-            'responses' => (new RiskyResponseAPI)->getResponses($env, $id)
+            'responses' => (new RiskyResponseAPI($request))->getResponses($env, $id)
         ];
     }
 
