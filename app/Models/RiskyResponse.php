@@ -33,7 +33,4 @@ class RiskyResponse extends Model
         return $this->belongsTo(RaceConstraint::class);
     }
 
-    public function grade_constraint(): BelongsTo {
-        return $this->belongsTo(GradeConstraint::class);
-    }
 }

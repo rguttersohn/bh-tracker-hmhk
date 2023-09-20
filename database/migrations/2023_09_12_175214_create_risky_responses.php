@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('year')->index();
-            $table->float('data')->index();
+            $table->float('data')->nullable()->index();
             $table->foreignId('risky_question_id')->constrained();
             $table->foreignId('gender_constraint_id')->nullable()->constrained();
             $table->foreignId('sexual_id_constraint_id')->nullable()->constrained();

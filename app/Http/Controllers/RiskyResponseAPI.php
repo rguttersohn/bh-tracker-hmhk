@@ -14,7 +14,6 @@ class RiskyResponseAPI extends Controller
         'gender_constraints.label as gender', 
         'race_constraints.label as race', 
         'sexual_id_constraints.label as sexual_id', 
-        'grade_constraints.label as grade'
     ];
 
     /** bind  query params to column 
@@ -34,7 +33,6 @@ class RiskyResponseAPI extends Controller
     protected array $allowed_queries = [
         'id' =>'rr.id', 
         'year' => 'year',  
-        'grade' => 'grade_constraints.slug', 
         'race' => 'race_constraints.slug',
         'sexual_id' => 'sexual_id_constraints.slug', 
         'sex' => 'gender_constraints.slug',
@@ -130,7 +128,6 @@ class RiskyResponseAPI extends Controller
             ->join('gender_constraints', 'rr.gender_constraint_id', '=', 'gender_constraints.id')
             ->join('race_constraints', 'rr.race_constraint_id', '=', 'race_constraints.id')
             ->join('sexual_id_constraints', 'rr.sexual_id_constraint_id', '=', 'sexual_id_constraints.id')
-            ->join('grade_constraints', 'rr.grade_constraint_id', '=', 'grade_constraints.id' )
             ->select(...$this->selections);
 
         if(!empty($this->getSort())):
@@ -149,7 +146,6 @@ class RiskyResponseAPI extends Controller
             ->join('gender_constraints', 'rr.gender_constraint_id', '=', 'gender_constraints.id')
             ->join('race_constraints', 'rr.race_constraint_id', '=', 'race_constraints.id')
             ->join('sexual_id_constraints', 'rr.sexual_id_constraint_id', '=', 'sexual_id_constraints.id')
-            ->join('grade_constraints', 'rr.grade_constraint_id', '=', 'grade_constraints.id' )
             ->select(...$this->selections);
         
         if(!empty($this->getSort())):

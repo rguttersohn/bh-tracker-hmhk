@@ -34,7 +34,6 @@ class RiskyQuestionResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('slug')->required(),
                 TextInput::make('question'),
                 TextArea::make('explanation'),
                 TextInput::make('source_url')->url(),
@@ -52,7 +51,6 @@ class RiskyQuestionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
-                TextColumn::make('slug'),
                 TextColumn::make('question'),
                 TextColumn::make('publication_status')
             ])

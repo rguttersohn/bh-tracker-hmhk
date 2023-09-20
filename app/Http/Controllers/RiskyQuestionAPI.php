@@ -11,7 +11,7 @@ class RiskyQuestionAPI extends Controller
 {
 
 
-    protected array $selection = ['id','slug','question','explanation','source_url','source_notes'];
+    protected array $selection = ['id','question','explanation','source_url','source_notes'];
 
 
     protected function getInvalidMessage($env):array{

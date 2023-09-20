@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Seed the yrbss tables.
      */
     public function run(): void
     {
+        
         DB::table('race_constraints')->insert([
             [
-                'slug' => 'total',
-                'label' => 'Total'
+                'slug' => 'all',
+                'label' => 'All'
             ],
             [
                 'slug' => 'ai/an',
@@ -50,8 +51,8 @@ class DatabaseSeeder extends Seeder
 
         DB::table('gender_constraints')->insert([
             [
-                'slug' => 'total',
-                'label' => 'Total'
+                'slug' => 'all',
+                'label' => 'All'
             ],
             [
                 'slug' => 'male',
@@ -65,8 +66,8 @@ class DatabaseSeeder extends Seeder
 
         DB::table('sexual_id_constraints')->insert([
             [
-                'slug' => 'total',
-                'label' => 'Total',
+                'slug' => 'all',
+                'label' => 'All',
             ],
             [
                 'slug' => 'heterosexual',
@@ -89,6 +90,26 @@ class DatabaseSeeder extends Seeder
                 'label' => 'Other/Questioning'
             ]
             ]);
+
+
+        DB::table('risky_questions')->insert([
+            [
+                'question' => 'Felt Sad or Hopeless',
+                'explanation' => 'Percent of students who said they felt sad or hopeless almost every day for 2 or more weeks in a row so that they stopped doing some usual activities, during the 12 months before the survey.',
+                'publication_status' => 'staging'
+            ],
+            [
+                'question' => 'Seriously Considered Attempting Suicide',
+                'explanation' => 'Percent of students who seriously considered attempting suicide during the 12 months before the survey.',
+                'publication_status' => 'staging'
+            ],
+            [
+                'question' => 'Actually Attempted Suicide',
+                'explanation' => 'Percent of students who actually attempted suicide
+                one or more times during the 12 months before the survey.',
+                'publication_status' => 'staging'
+            ],
+        ]);
 
     }
 }
