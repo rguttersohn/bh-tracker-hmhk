@@ -79,9 +79,15 @@ class RiskyResponseResource extends Resource
                 SelectFilter::make('sexual_id_constraint')
                     ->relationship('sexual_id_constraint', 'label')
                     ->label('Sexual ID'),
+                SelectFilter::make('gender_constraint')
+                ->relationship('gender_constraint', 'label')
+                ->label('Gender'),
+                SelectFilter::make('publication_status')
+                ->label('Status'),
             ])
             ->groups([
                 Group::make('updated_at'),
+                Group::make('created_at'),
                 Group::make('risky_question.question')->label('Question')
                 ])
             ->actions([

@@ -11,7 +11,7 @@ class RiskyResponseAPI extends Controller
         'rr.id',
         'rr.year', 
         'rr.data',
-        'gender_constraints.label as gender', 
+        'gender_constraints.label as sex', 
         'race_constraints.label as race', 
         'sexual_id_constraints.label as sexual_id', 
     ];
