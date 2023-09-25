@@ -3,8 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RiskyQuestionAPI;
-use App\Http\Controllers\RiskyResponseAPI;
-use App\Http\Controllers\RiskyFilterAPI;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +23,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/1/{env}/yrbss/questions/', [RiskyQuestionAPI::class, 'getQuestions']);
 
 Route::get('/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuestion']);
-
-Route::get('/1/{env}/yrbss/filters', [RiskyFilterAPI::class, 'getFilters']);
