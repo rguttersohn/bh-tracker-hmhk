@@ -18,21 +18,21 @@ class RiskyFilterAPI extends Controller
             select('race_constraints.id', 'slug','label', 'explanation')
             ->distinct()
             ->join('risky_responses', 'race_constraints.id','=', 'race_constraint_id')
-            ->where('risky_responses.risky_question_id', '=', $id)
+            ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'staging'] ])
             ->get()->toArray();
 
         $sex_query = DB::table('gender_constraints')
             ->select('gender_constraints.id', 'slug','label', 'explanation')
             ->distinct()
-            ->join('risky_responses', 'gender_constraints.id','=', 'race_constraint_id')
-            ->where('risky_responses.risky_question_id', '=', $id)
+            ->join('risky_responses', 'gender_constraints.id','=', 'gender_constraint_id')
+            ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'staging']])
             ->get()->toArray();
 
         $sexual_id_query = DB::table('sexual_id_constraints')
         ->select('sexual_id_constraints.id', 'slug','label', 'explanation')
         ->distinct()
-        ->join('risky_responses', 'sexual_id_constraints.id','=', 'race_constraint_id')
-        ->where('risky_responses.risky_question_id', '=', $id)
+        ->join('risky_responses', 'sexual_id_constraints.id','=', 'sexual_id_constraint_id')
+        ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'staging']])
         ->get()->toArray();
 
         return [
