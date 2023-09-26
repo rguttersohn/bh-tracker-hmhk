@@ -80,7 +80,7 @@ class RiskyQuestionAPI extends Controller
         return [
             'question' => $question_query,
             'responses' => (new RiskyResponseAPI($request))->getResponses($env, $id),
-            'filters' => (new RiskyFilterAPI())->getFilters($id)
+            'filters' => (new RiskyFilterAPI())->getFilters($env, $id)
         ];
     }
 

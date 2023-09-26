@@ -29,11 +29,11 @@ class RiskyFilterAPI extends Controller
             ->get()->toArray();
 
         $sexual_id_query = DB::table('sexual_id_constraints')
-        ->select('sexual_id_constraints.id', 'slug','label', 'explanation')
-        ->distinct()
-        ->join('risky_responses', 'sexual_id_constraints.id','=', 'sexual_id_constraint_id')
-        ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'staging']])
-        ->get()->toArray();
+            ->select('sexual_id_constraints.id', 'slug','label', 'explanation')
+            ->distinct()
+            ->join('risky_responses', 'sexual_id_constraints.id','=', 'sexual_id_constraint_id')
+            ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'staging']])
+            ->get()->toArray();
 
         return [
             'race' => $race_query,
