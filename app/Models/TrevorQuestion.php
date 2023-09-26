@@ -11,7 +11,7 @@ class TrevorQuestion extends Model
 {
     use HasFactory;
 
-    public function trevor_catgory():BelongsTo{
+    public function trevor_category():BelongsTo{
         return $this->belongsTo(TrevorCategory::class);
     }
 
