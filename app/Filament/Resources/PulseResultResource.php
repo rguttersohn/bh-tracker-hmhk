@@ -26,14 +26,15 @@ class PulseResultResource extends Resource
 
     protected static ?string $navigationGroup = 'Pulse Survey MH Treatments';
 
+    protected static ?int $navigationSort = 2;
+
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('week')->numeric()->label('Week Number'),
                 TextInput::make('data')->numeric()->inputMode('decimals'),
-                TextInput::make('date_range'),
+                Select::make('date_range')->relationship('pulse_date_range','range'),
                 Select::make('pulse_question_id')->label('Pulse Question')->options(PulseQuestion::all()->pluck('question', 'id')->toArray())
                     ->reactive(),
                 Select::make('pulse_response_id')->options(

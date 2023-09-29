@@ -18,6 +18,10 @@ class PulseResult extends Model
         return $this->belongsTo(PulseResponse::class);
     }
 
+    public function pulse_date_range():BelongsTo {
+        return $this->belongsTo(PulseDateRange::class);
+    }
+
     
    
 }

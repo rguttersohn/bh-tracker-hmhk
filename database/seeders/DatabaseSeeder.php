@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'slug' => 'ai/an',
-                'label' => 'AI/AN'
+                'label' => 'American Indian or Alaska Native'
             ],
             [
                 'slug' => 'asian',
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'slug' => 'nhopi',
-                'label' => 'NHOPI'
+                'label' => 'Native Hawaiian/Other Pacific Islander'
             ],
             [
                 'slug' => 'white',

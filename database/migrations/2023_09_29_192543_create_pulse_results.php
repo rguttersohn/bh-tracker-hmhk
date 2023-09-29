@@ -16,8 +16,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->float('data');
-            $table->integer('week');
-            $table->text('date_range');
+            $table->foreignId('date_range_id')->nullabe()->constrained('pulse_date_ranges');
             $table->foreignId('pulse_question_id')->nullable()->constrained('pulse_questions');
             $table->foreignId('pulse_response_id')->nullable()->constrained('pulse_responses');
             $table->text('publication_status');

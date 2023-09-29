@@ -24,6 +24,8 @@ class PulseResponseResource extends Resource
 
     protected static ?string $navigationGroup = 'Pulse Survey MH Treatments';
 
+    protected static ?int $navigationSort = 98;
+
 
     public static function form(Form $form): Form
     {
