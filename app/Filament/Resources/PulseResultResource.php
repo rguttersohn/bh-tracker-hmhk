@@ -34,8 +34,12 @@ class PulseResultResource extends Resource
         return $form
             ->schema([
                 TextInput::make('data')->numeric()->inputMode('decimals'),
-                Select::make('date_range')->relationship('pulse_date_range','range'),
-                Select::make('pulse_question_id')->label('Pulse Question')->options(PulseQuestion::all()->pluck('question', 'id')->toArray())
+                Select::make('date_range_id')->relationship('pulse_date_range','range'),
+                Select::make('pulse_question_id')
+                    ->label('Pulse Question')
+                    ->options(PulseQuestion::all()
+                    ->pluck('question', 'id')
+                    ->toArray())
                     ->reactive(),
                 Select::make('pulse_response_id')->options(
                     function(callable $get){
@@ -58,11 +62,11 @@ class PulseResultResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('week'),
-                TextColumn::make('date_range'),
-                TextColumn::make('pulse_treatment_question.label'),
-                TextColumn::make('pulse_treatment_response.label')
-                //
+                TextColumn::make('data'),
+                TextColumn::make('pulse_date_range.range'),
+                TextColumn::make('pulse_question.question'),
+                TextColumn::make('pulse_response.slug')
+                
             ])
             ->filters([
                 //

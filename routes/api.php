@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RiskyQuestionAPI;
 use App\Http\Controllers\TrevorCategoryAPI;
+use App\Http\Controllers\PulseQuestionAPI;
 
 
 /*
@@ -36,3 +37,12 @@ Route::get('/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuesti
 Route::get('/1/{env}/trevor/categories', [TrevorCategoryAPI::class, 'getCategories']);
 
 Route::get('/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCategory']);
+
+/** pulse survey api endpoints
+ * the first endpoint returns all pulse questions
+ * the second endpoint gets the pulse question and its results
+ */
+
+Route::get('/1/{env}/pulse/questions', [PulseQuestionAPI::class, 'getPulseQuestions']);
+
+Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQuestion']);

@@ -11,15 +11,9 @@ use Illuminate\Http\Request;
 class RiskyQuestionAPI extends Controller
 {
 
+    use InvalidMessages;
 
     protected array $selection = ['id','question','explanation','source_url','source_notes'];
-
-
-    protected function getInvalidMessage($env):array{
-        return [
-            'error' => "'{$env}' is not a valid environment"
-        ];
-    }
 
     protected function stagingQuestionQuery(string $id):array {
 
