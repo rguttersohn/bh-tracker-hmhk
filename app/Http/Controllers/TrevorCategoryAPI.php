@@ -4,29 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\TrevorQuestion;
-use App\Models\TrevorCategory;
 
 class TrevorCategoryAPI extends Controller
-{
-
+{   
+    
     use InvalidMessages;
 
+    protected array $selection = ['id', 'question','explanation', 'source_url', 'source_notes'];
+
     protected function getStagingQuestions($id){
-        return TrevorQuestion::select('id', 'question','explanation', 'source_url', 'source_notes')
-            ->where('publication_status', '=', 'staging')
-            ->orWhere('publication_status', '=', 'production')
-            ->with('trevor_response:id,data,year,trevor_question_id')
-            ->where('trevor_category_id', '=', $id)
-            ->get();
+        
+        $questions = DB::table('trevor_questions')->select($this->selection)
+            ->where([['trevor_category_id', '=', $id],['publication_status', '=', 'staging']])
+            ->orWhere([['trevor_category_id', '=', $id],['publication_status', '=', 'production']])
+            ->get()->toArray();
+
+        foreach($questions as $question):
+            
+            $question->responses = (new TrevorResponseAPI())->getStagingResponses($question->id);
+
+        endforeach;
+
+        return $questions;
     }
 
     protected function getProductionQuestions($id){
-        return TrevorQuestion::select('id', 'question','explanation', 'source_url', 'source_notes')
-            ->where('publication_status', '=', 'production')
-            ->with('trevor_response:id,data,year,trevor_question_id')
-            ->where('trevor_category_id', '=', $id)
-            ->get();
+        
+        $questions = DB::table('trevor_questions')->select($this->selection)
+            ->where([['trevor_category_id', '=', $id],['publication_status', '=', 'production']])
+            ->get()->toArray();
+        
+        foreach($questions as $question):
+            
+            $question->responses = (new TrevorResponseAPI)->getProductionResponses($question->id);
+
+        endforeach;
+
+        return $questions;
     }
 
     public function getCategories($env):array {
@@ -37,7 +51,7 @@ class TrevorCategoryAPI extends Controller
 
         }
             
-        return TrevorCategory::select('id', 'slug', 'label')->get()->toArray();
+        return DB::table('trevor_categories')->select('id', 'slug', 'label')->get()->toArray();
     }
 
     public function getCategory($env, $id):array {
@@ -54,7 +68,7 @@ class TrevorCategoryAPI extends Controller
         };
 
         return [
-            'category' => TrevorCategory::select('id', 'slug', 'label')->where('id', '=', $id)->get(),
+            'category' => DB::table('trevor_categories')->select('id', 'slug', 'label')->where('id', '=', $id)->get(),
             'questions' => $questions
         ];
     }
