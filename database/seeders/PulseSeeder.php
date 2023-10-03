@@ -66,7 +66,7 @@ class PulseSeeder extends Seeder
                  'pulse_question_id' => 1
              ],
          ]);
-         DB::table('pulse_date_ranges')->insert([
+         DB::table('pulse_weeks')->insert([
              [
                  'range' => '6/7 - 6/19',
                  'week' => 58,

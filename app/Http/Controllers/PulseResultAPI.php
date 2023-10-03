@@ -9,37 +9,35 @@ class PulseResultAPI extends Controller
 {
     use InvalidMessages;
 
-    protected array $selection = ['ps.id', 'ps.data', 'pr.label', 'pdr.week', 'pdr.range'];
+    protected array $selection = ['ps.id', 'ps.data', 'pr.label', 'pw.week', 'pw.range'];
 
-    protected function getStagingResults(string $id):array{
+    public function getResults(string $env, string $id, int $week):array{
         
-        return DB::table('pulse_results as ps')
-            ->select($this->selection)
-            ->where([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'staging']])
-            ->orWhere([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'production']])
-            ->join('pulse_responses as pr', 'pr.id', '=','ps.pulse_response_id')
-            ->join('pulse_date_ranges as pdr', 'pdr.id', '=','ps.date_range_id')
-            ->get()->toArray();
-    
-    }
+        if($env != 'staging' & $env != 'production'):
+            
+            return $this->getInvalidMessage($env);
+        
+        endif;
 
 
-    protected function getProductionResults(string $id):array {
+        $production_env = $env == 'production';
+        $production_staging = $env == 'staging';
 
         return DB::table('pulse_results as ps')
             ->select($this->selection)
-            ->where([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'production']])
+            ->when($production_staging, 
+                function($query) use($id, $week) {
+                    return $query
+                        ->where([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'staging'], ['ps.pulse_week_id', '=', $week]])
+                        ->orWhere([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'production'],['ps.pulse_week_id', '=', $week ]]);
+                })
+            ->when($production_env, function($query) use($id, $week){
+                return $query
+                    ->where([['ps.pulse_question_id', '=', $id], ['ps.publication_status', '=', 'production'], ['ps.pulse_week_id', '=', $week ]]);  
+            })
             ->join('pulse_responses as pr', 'pr.id', '=','ps.pulse_response_id')
-            ->join('pulse_date_ranges as pdr', 'pdr.id', '=','ps.date_range_id')
+            ->join('pulse_weeks as pw', 'pw.id', '=','ps.pulse_week_id')
             ->get()->toArray();
     }
 
-    public function getResults(string $env, string $id):array {
-
-        return match($env){
-            'staging' => $this->getStagingResults($id),
-            'production' => $this->getProductionResults($id),
-            default => $this->getInvalidMessage($env)
-        };
-    } 
 }

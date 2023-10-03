@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('publication_status');
         });
 
-        DB::statement('ALTER TABLE pulse_questions ADD CONSTRAINT check_ptq_publication_status CHECK( publication_status = "draft" OR  publication_status = "staging" OR publication_status = "production")');
+        DB::statement('ALTER TABLE pulse_questions ADD CONSTRAINT check_pq_publication_status CHECK( publication_status = "draft" OR  publication_status = "staging" OR publication_status = "production")');
 
     }
 

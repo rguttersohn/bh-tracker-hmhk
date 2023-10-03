@@ -15,15 +15,15 @@ return new class extends Migration
         Schema::create('pulse_results', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->float('data');
-            $table->foreignId('date_range_id')->nullabe()->constrained('pulse_date_ranges');
+            $table->float('data')->nullable();
+            $table->foreignId('pulse_week_id')->nullabe()->constrained('pulse_weeks');
             $table->foreignId('pulse_question_id')->nullable()->constrained('pulse_questions');
             $table->foreignId('pulse_response_id')->nullable()->constrained('pulse_responses');
             $table->text('publication_status');
 
         });
 
-        DB::statement('ALTER TABLE pulse_results ADD CONSTRAINT check_ptr_publication_status CHECK( publication_status = "draft" OR  publication_status = "staging" OR publication_status = "production")');
+        DB::statement('ALTER TABLE pulse_results ADD CONSTRAINT check_pr_publication_status CHECK( publication_status = "draft" OR  publication_status = "staging" OR publication_status = "production")');
 
     }
 

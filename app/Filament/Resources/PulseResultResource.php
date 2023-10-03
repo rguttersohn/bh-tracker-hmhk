@@ -34,7 +34,7 @@ class PulseResultResource extends Resource
         return $form
             ->schema([
                 TextInput::make('data')->numeric()->inputMode('decimals'),
-                Select::make('date_range_id')->relationship('pulse_date_range','range'),
+                Select::make('pulse_week_id')->relationship('pulse_week','range'),
                 Select::make('pulse_question_id')
                     ->label('Pulse Question')
                     ->options(PulseQuestion::all()
@@ -62,8 +62,9 @@ class PulseResultResource extends Resource
     {
         return $table
             ->columns([
+                
                 TextColumn::make('data'),
-                TextColumn::make('pulse_date_range.range'),
+                TextColumn::make('pulse_week.range'),
                 TextColumn::make('pulse_question.question'),
                 TextColumn::make('pulse_response.slug')
                 

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PulseDateRangeResource\Pages;
-use App\Filament\Resources\PulseDateRangeResource\RelationManagers;
-use App\Models\PulseDateRange;
+use App\Filament\Resources\PulseWeekResource\Pages;
+use App\Filament\Resources\PulseWeekResource\RelationManagers;
+use App\Models\PulseWeek;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,14 +14,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 
-class PulseDateRangeResource extends Resource
+
+class PulseWeekResource extends Resource
 {
-    protected static ?string $model = PulseDateRange::class;
+    protected static ?string $model = PulseWeek::class;
+
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
     protected static ?string $navigationGroup = 'Pulse Survey MH Treatments';
-    protected static ?int $navigationSort = 99 ;
+    protected static ?int $navigationSort = 99;
 
 
     public static function form(Form $form): Form
@@ -64,9 +67,9 @@ class PulseDateRangeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPulseDateRanges::route('/'),
-            'create' => Pages\CreatePulseDateRange::route('/create'),
-            'edit' => Pages\EditPulseDateRange::route('/{record}/edit'),
+            'index' => Pages\ListPulseWeeks::route('/'),
+            'create' => Pages\CreatePulseWeek::route('/create'),
+            'edit' => Pages\EditPulseWeek::route('/{record}/edit'),
         ];
     }    
 }

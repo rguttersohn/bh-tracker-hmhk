@@ -60,7 +60,7 @@ class PulseQuestionAPI extends Controller
         };
 
         return ['question' => $question,
-                'results' => (new PulseResultAPI())->getResults($env, $id)
+                'weeks' => (new PulseWeekAPI())->getWeeks($id, $env),
                 ];
     }
 

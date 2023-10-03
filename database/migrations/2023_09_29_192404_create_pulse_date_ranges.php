@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pulse_date_ranges', function (Blueprint $table) {
+        Schema::create('pulse_weeks', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->integer('week');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pulse_date_ranges');
+        Schema::dropIfExists('pulse_weeks');
     }
 };
