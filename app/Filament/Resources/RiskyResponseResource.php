@@ -31,11 +31,11 @@ class RiskyResponseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
-    protected static ?string $label = 'Youth Risky Behavior Responses';
+    protected static ?string $label = 'Responses';
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Youth Risky Behavior Survey';
+    protected static ?string $navigationGroup = 'Youth Risk Behavior Survey';
 
     public static function form(Form $form): Form
     {

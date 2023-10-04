@@ -24,9 +24,9 @@ class RiskyQuestionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
-    protected static ?string $label = 'Youth Risky Behavior Questions';
+    protected static ?string $label = 'Questions';
 
-    protected static ?string $navigationGroup = 'Youth Risky Behavior Survey';
+    protected static ?string $navigationGroup = 'Youth Risk Behavior Survey';
     
     protected static ?int $navigationSort = 1;
 

@@ -25,7 +25,7 @@ class SexualIDConstraintResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationGroup = 'Youth Risky Behavior Survey';
+    protected static ?string $navigationGroup = 'Youth Risk Behavior Survey';
 
     public static function form(Form $form): Form
     {
