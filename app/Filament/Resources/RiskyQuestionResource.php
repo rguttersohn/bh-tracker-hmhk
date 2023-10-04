@@ -13,7 +13,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TextArea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 
@@ -35,9 +34,9 @@ class RiskyQuestionResource extends Resource
         return $form
             ->schema([
                 TextInput::make('question'),
-                TextArea::make('explanation'),
+                TextInput::make('explanation'),
                 TextInput::make('source_url')->url(),
-                TextArea::make('source_notes'),
+                TextInput::make('source_notes'),
                 Select::make('publication_status')->label('Status')->options([
                     'draft' => 'Draft',
                     'staging' => 'Staging',
