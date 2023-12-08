@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RiskyQuestionAPI;
 use App\Http\Controllers\TrevorCategoryAPI;
 use App\Http\Controllers\PulseQuestionAPI;
+use App\Http\Controllers\RiskyFilterAPI;
+use App\Http\Controllers\RiskyResponseAPI;
 
 
 /*
@@ -22,15 +24,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-/** cdc yrbss data endpoints 
+/** CDC YRBSS RESPONSES 
  * The first endpoint returns all questions.
  * The second endpoint returns a question with the matching id,
- *  the questions responses, and the avialable filters for that question based on production env
+ * The questions responses, and the avialable filters for that question based on production env
+ * The third endpoint returns filters for the question
+ * The fourth endpoint returns returns responses for the question
 */
 
 Route::get('/1/{env}/yrbss/questions/', [RiskyQuestionAPI::class, 'getQuestions']);
 
 Route::get('/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuestion']);
+
+Route::get('/1/{env}/yrbss/questions/{id}/filters', [RiskyFilterAPI::class, 'getFilters']);
+
+Route::get('/1/{env}/yrbss/questions/{id}/responses', [RiskyResponseAPI::class, 'getResponses']);
+
 
 /** trevor project end points */
 

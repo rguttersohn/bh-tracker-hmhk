@@ -139,7 +139,7 @@ class RiskyResponseAPI extends Controller
         return $query->get()->toArray();
     }
 
-    protected function productionResponsesQuery(string $id){
+    protected function productionResponsesQuery(string $id):array{
 
         $query = DB::table('risky_responses as rr')
             ->where([['publication_status', '=', 'production'], ['rr.risky_question_id', '=', $id], ... $this->getFilters()])
