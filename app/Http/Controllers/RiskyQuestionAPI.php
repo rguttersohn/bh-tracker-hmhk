@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\RiskyResponseAPI;
-use App\Http\Controllers\RiskyFilterAPI;
 use Illuminate\Http\Request;
 
 
@@ -73,8 +71,6 @@ class RiskyQuestionAPI extends Controller
             
         return [
             'question' => $question_query,
-            'responses' => (new RiskyResponseAPI($request))->getResponses($env, $id),
-            'filters' => (new RiskyFilterAPI())->getFilters($env, $id)
         ];
     }
 
