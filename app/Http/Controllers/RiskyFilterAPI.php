@@ -35,10 +35,18 @@ class RiskyFilterAPI extends Controller
             ->orWhere([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'production']])
             ->get()->toArray();
 
+        $year_query = DB::table('risky_responses as rr')
+            ->select('year')
+            ->distinct()
+            ->where([['rr.risky_question_id', '=', $id], ['rr.publication_status', '=', 'staging']])
+            ->orWhere([['rr.risky_question_id', '=', $id], ['rr.publication_status', '=', 'production']])
+            ->get()->toArray();
+
         return [
             'race' => $race_query,
             'sex' => $sex_query,
-            'sexual_id' => $sexual_id_query
+            'sexual_id' => $sexual_id_query,
+            'year' => $year_query
         ];
     }
 
@@ -64,11 +72,20 @@ class RiskyFilterAPI extends Controller
             ->join('risky_responses', 'sexual_id_constraints.id','=', 'sexual_id_constraint_id')
             ->where([['risky_responses.risky_question_id', '=', $id], ['risky_responses.publication_status', '=', 'production']])
             ->get()->toArray();
+        
+        $year_query = DB::table('risky_responses as rr')
+            ->select('year')
+            ->distinct()
+            ->where([['rr.risky_question_id', '=', $id], ['rr.publication_status', '=', 'production']])
+            ->get()->toArray();
+
+        
 
         return [
             'race' => $race_query,
             'sex' => $sex_query,
-            'sexual_id' => $sexual_id_query
+            'sexual_id' => $sexual_id_query,
+            'year' => $year_query
         ];
     }
 
