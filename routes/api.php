@@ -7,6 +7,7 @@ use App\Http\Controllers\TrevorCategoryAPI;
 use App\Http\Controllers\PulseQuestionAPI;
 use App\Http\Controllers\RiskyFilterAPI;
 use App\Http\Controllers\RiskyResponseAPI;
+use App\Http\Controllers\RiskyYearsAPI;
 
 
 /*
@@ -37,6 +38,8 @@ Route::get('/1/{env}/yrbss/questions/', [RiskyQuestionAPI::class, 'getQuestions'
 Route::get('/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuestion']);
 
 Route::get('/1/{env}/yrbss/questions/{id}/filters', [RiskyFilterAPI::class, 'getFilters']);
+
+Route::get('/1/{env}/yrbss/questions/{id}/years', [RiskyYearsAPI::class, 'getYears']);
 
 Route::get('/1/{env}/yrbss/questions/{id}/responses', [RiskyResponseAPI::class, 'getResponses']);
 
