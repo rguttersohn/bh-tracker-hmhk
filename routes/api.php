@@ -7,6 +7,7 @@ use App\Http\Controllers\TrevorCategoryAPI;
 use App\Http\Controllers\PulseQuestionAPI;
 use App\Http\Controllers\RiskyFilterAPI;
 use App\Http\Controllers\RiskyResponseAPI;
+use App\Http\Controllers\OutPatientCapacityAPI;
 
 
 /*
@@ -55,3 +56,12 @@ Route::get('/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCat
 Route::get('/1/{env}/pulse/questions', [PulseQuestionAPI::class, 'getPulseQuestions']);
 
 Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQuestion']);
+
+/***
+ * 
+ *omh outpatient capacity endpoints
+ *
+ */
+
+ Route::get('/1/{env}/omh-outpatient-capacity/', [OutPatientCapacityAPI::class, 'getOutPatientCapacityData']);
+

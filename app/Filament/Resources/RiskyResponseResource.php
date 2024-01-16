@@ -3,25 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RiskyResponseResource\Pages;
-use App\Filament\Resources\RiskyResponseResource\RelationManagers;
 use App\Models\RiskyResponse;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
-use Filament\Actions\EditAction;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Support\Enums\ActionSize;
-use App\Filament\Resources\Collection;
 use Filament\Tables\Actions\BulkActionGroup;
 
 
@@ -124,22 +117,22 @@ class RiskyResponseResource extends Resource
                             });
                         })->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
-                    Tables\Actions\BulkAction::make('Staging')
-                    ->action(function($records){
-                        $records->each(function($record){
-                            $record->publication_status = 'staging';
-                            $record->save();
-                        });
-                    })->requiresConfirmation()
-                    ->deselectRecordsAfterCompletion(),
-                    Tables\Actions\BulkAction::make('Production')
-                    ->action(function($records){
-                        $records->each(function($record){
-                            $record->publication_status = 'production';
-                            $record->save();
-                        });
-                    })->requiresConfirmation()
-                    ->deselectRecordsAfterCompletion(),
+                        Tables\Actions\BulkAction::make('Staging')
+                        ->action(function($records){
+                            $records->each(function($record){
+                                $record->publication_status = 'staging';
+                                $record->save();
+                            });
+                        })->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                        Tables\Actions\BulkAction::make('Production')
+                        ->action(function($records){
+                            $records->each(function($record){
+                                $record->publication_status = 'production';
+                                $record->save();
+                            });
+                        })->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
                     ])->button()->label('Change Status')->icon('heroicon-o-bars-3')->color('success'),
                     
                 ]),
