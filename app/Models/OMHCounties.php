@@ -12,7 +12,7 @@ class OMHCounties extends Model
 
     protected $table = 'omh_counties';
 
-    public function outPatientCapacity():HasMany{
-        return $this->hasMany(OutPatientCapacity::class);
+    public function omhData():HasMany{
+        return $this->hasMany(OMHData::class);
     }
 }

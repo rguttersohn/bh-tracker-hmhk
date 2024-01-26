@@ -20,7 +20,6 @@ class ListOMHCounties extends ListRecords
                 ->label('Import Counties')
                 ->fields([
                     ImportField::make('name')->required(),
-                    ImportField::make('slug')->required(),
                 ])
         ];
     }

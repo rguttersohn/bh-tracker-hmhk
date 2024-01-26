@@ -7,7 +7,7 @@ use App\Http\Controllers\TrevorCategoryAPI;
 use App\Http\Controllers\PulseQuestionAPI;
 use App\Http\Controllers\RiskyFilterAPI;
 use App\Http\Controllers\RiskyResponseAPI;
-use App\Http\Controllers\OutPatientCapacityAPI;
+use App\Http\Controllers\OMHDataAPI;
 
 
 /*
@@ -59,9 +59,17 @@ Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQ
 
 /***
  * 
- *omh outpatient capacity endpoints
+ *omh data endpoints
  *
+ * first returns omh data at the state level by year
+ * second returns omh data at the regional level. can be filtered by year and region
+ * third returns omh data at the county level. can be filtered by year and county
+ * 
  */
 
- Route::get('/1/{env}/omh-outpatient-capacity/', [OutPatientCapacityAPI::class, 'getOutPatientCapacityData']);
+Route::get('app/1/{env}/omh/datasets', [OMHDataAPI::class, 'getOMHDatasets']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}', [OMHDataAPI::class, 'getOMHData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/state', [OMHDataAPI::class, 'getStateOMHData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionsOMHData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties', [OMHDataAPI::class, 'getCountiesOMHData'] );
 

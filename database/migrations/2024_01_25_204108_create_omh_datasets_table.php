@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('omh_regions', function(Blueprint $table){
+        Schema::create('omh_datasets', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->text('name');
+            $table->text('description')->nullable();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('omh_regions');
+        Schema::dropIfExists('omh_datasets');
     }
 };

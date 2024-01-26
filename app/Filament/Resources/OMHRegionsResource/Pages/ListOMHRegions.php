@@ -21,7 +21,6 @@ class ListOMHRegions extends ListRecords
                 ->label('Import Regions')
                 ->fields([
                     ImportField::make('name')->required(),
-                    ImportField::make('slug')->required(),
                 ])
         ];
     }

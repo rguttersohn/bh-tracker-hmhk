@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('omh_counties', function(Blueprint $table){
             $table->id();
             $table->timestamps();
-            $table->string('slug', 100)->unique();
             $table->text('name');
         });
     }

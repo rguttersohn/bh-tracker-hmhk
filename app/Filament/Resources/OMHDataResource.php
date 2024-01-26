@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OutPatientCapacityResource\Pages;
-use App\Filament\Resources\OutPatientCapacityResource\RelationManagers;
-use App\Models\OutPatientCapacity;
-use Filament\Forms\Components\Select;
+use App\Filament\Resources\OMHDataResource\Pages;
+use App\Filament\Resources\OMHDataResource\RelationManagers;
+use App\Models\OMHData;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\ActionGroup;
@@ -18,31 +21,34 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Grouping\Group;
 
-class OutPatientCapacityResource extends Resource
+
+
+
+class OMHDataResource extends Resource
 {
-    protected static ?string $model = OutPatientCapacity::class;
-
-
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     protected static ?string $navigationGroup = 'OMH Data';
 
     protected static ?int $navigationSort = 99;
 
+    protected static ?string $label = "Data";
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('year')->numeric(),
-                Select::make('region_id')->relationship('regions', 'name'),
-                Select::make('county_id')->relationship('counties', 'name'),
-                TextInput::make('capacity'),
-                TextInput::make('rate_per_k')->numeric()->inputMode('decimal'),
-                Select::make('publication_status')->options([
-                    'draft' =>'Draft',
-                    'staging' => 'Staging',
-                    'production' => 'Production'
-                ])
+                    Select::make('dataset_id')->relationship('datasets', 'name'),
+                    TextInput::make('year')->numeric(),
+                    Select::make('region_id')->relationship('region', 'name'),
+                    Select::make('county_id')->relationship('county', 'name'),
+                    TextInput::make('capacity'),
+                    TextInput::make('rate_per_k')->numeric()->inputMode('decimal'),
+                    Select::make('publication_status')->options([
+                        'draft' =>'Draft',
+                        'staging' => 'Staging',
+                        'production' => 'Production'
+                    ])
             ]);
     }
 
@@ -51,8 +57,8 @@ class OutPatientCapacityResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('year'),
-                TextColumn::make('regions.name'),
-                TextColumn::make('counties.name'),
+                TextColumn::make('region.name'),
+                TextColumn::make('county.name'),
                 TextColumn::make('capacity'),
                 TextColumn::make('rate_per_k'),
                 TextColumn::make('publication_status')
@@ -64,8 +70,8 @@ class OutPatientCapacityResource extends Resource
                     'staging' => 'Staging',
                     'production' => 'Production'
                 ]),
-                SelectFilter::make('county_id')->relationship('counties', 'name'),
-                SelectFilter::make('region_id')->relationship('regions', 'name')
+                SelectFilter::make('county_id')->relationship('county', 'name'),
+                SelectFilter::make('region_id')->relationship('region', 'name')
 
             ])
             ->actions([
@@ -73,17 +79,17 @@ class OutPatientCapacityResource extends Resource
                 Tables\Actions\DeleteAction::make()->requiresConfirmation(),
                 ActionGroup::make([
                     Tables\Actions\Action::make('Draft')
-                    ->action(function(OutPatientCapacity $record){
+                    ->action(function(OMHData $record){
                         $record->publication_status = 'draft';
                         $record->save();
                     }),
                     Tables\Actions\Action::make('Staging')
-                    ->action(function(OutPatientCapacity $record){
+                    ->action(function(OMHData $record){
                         $record->publication_status = 'staging';
                         $record->save();
                     }),
                     Tables\Actions\Action::make('Production')
-                    ->action(function(OutPatientCapacity $record){
+                    ->action(function(OMHData $record){
                         $record->publication_status = 'production';
                         $record->save();
                     })
@@ -137,9 +143,9 @@ class OutPatientCapacityResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOutPatientCapacities::route('/'),
-            'create' => Pages\CreateOutPatientCapacity::route('/create'),
-            'edit' => Pages\EditOutPatientCapacity::route('/{record}/edit'),
+            'index' => Pages\ListOMHData::route('/'),
+            'create' => Pages\CreateOMHData::route('/create'),
+            'edit' => Pages\EditOMHData::route('/{record}/edit'),
         ];
     }    
 }

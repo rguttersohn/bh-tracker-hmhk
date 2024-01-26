@@ -1,25 +1,41 @@
 <?php
 
-namespace App\Filament\Resources\OutPatientCapacityResource\Pages;
+namespace App\Filament\Resources\OMHDataResource\Pages;
 
-use App\Filament\Resources\OutPatientCapacityResource;
+use App\Filament\Resources\OMHDataResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Konnco\FilamentImport\Actions\ImportAction;
 use Konnco\FilamentImport\Actions\ImportField;
 use Illuminate\Support\Facades\DB;
 
-class ListOutPatientCapacities extends ListRecords
+class ListOMHData extends ListRecords
 {
-    protected static string $resource = OutPatientCapacityResource::class;
+    protected static string $resource = OMHDataResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
             ImportAction::make()
-                ->label('Import Capacity Data')
+                ->label('Import OMH Data')
                 ->fields([
+                    ImportField::make('dataset_id')
+                        ->required()
+                        ->label('Dataset Name')
+                        ->mutateBeforeCreate(function($value){
+                            $dataset = DB::table('omh_datasets')
+                                ->select('id')
+                                ->where('name','=', $value)
+                                ->first();
+                            
+                            if($dataset?->id):
+                                return $dataset->id;
+                            else:
+                                return $value;
+                            endif;
+                        
+                        }),
                     ImportField::make('year')->required(),
                     ImportField::make('region_id')
                         ->required()

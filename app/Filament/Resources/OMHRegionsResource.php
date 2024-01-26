@@ -31,7 +31,6 @@ class OMHRegionsResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
-                TextInput::make('slug')
             ]);
     }
 
@@ -40,7 +39,6 @@ class OMHRegionsResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('slug')
             ])
             ->filters([
                 //
