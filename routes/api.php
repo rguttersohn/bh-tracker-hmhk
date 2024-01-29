@@ -68,8 +68,9 @@ Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQ
  */
 
 Route::get('app/1/{env}/omh/datasets', [OMHDataAPI::class, 'getOMHDatasets']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}', [OMHDataAPI::class, 'getOMHData']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}/state', [OMHDataAPI::class, 'getStateOMHData']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionsOMHData']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties', [OMHDataAPI::class, 'getCountiesOMHData'] );
+Route::get('app/1/{env}/omh/datasets/{dataset_id}', [OMHDataAPI::class, 'getData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/state', [OMHDataAPI::class, 'getStateData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties', [OMHDataAPI::class, 'getCountyData'] );
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/map/{year}', [OMHDataAPI::class, 'getCountyMapData'] );
 

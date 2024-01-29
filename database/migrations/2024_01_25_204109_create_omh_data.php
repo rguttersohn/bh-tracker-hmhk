@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('year')->index();
-            $table->string('publication_status', 20);
+            $table->string('publication_status', 20)->index();
             $table->foreignId('dataset_id')->constrained('omh_datasets');
             $table->foreignId('region_id')->constrained('omh_regions');
             $table->foreignId('county_id')->constrained('omh_counties');
