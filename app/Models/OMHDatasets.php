@@ -13,14 +13,6 @@ class OMHDatasets extends Model
 
     protected $table = 'omh_datasets';
 
-    public static function boot(): void
-    {   
-        parent::boot();
-
-        static::creating(fn()=>Cache::forget('omh:datasets'));
-        
-    }
-
     private function selectFields():array{
         return ['dataset_id','year','rate_per_k','capacity','county_id','region_id'];
     }

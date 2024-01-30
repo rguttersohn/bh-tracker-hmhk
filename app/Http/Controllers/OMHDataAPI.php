@@ -53,8 +53,8 @@ class OMHDataAPI extends Controller
 
     public function getDataSets():Collection {
 
-        $data = Cache::rememberForever('omhDatasets',fn()=>OMHDatasets::get(['id', 'name', 'description']));
-        return $data;
+        return OMHDatasets::get(['id', 'name', 'description']);
+        
     }
 
     public function getData($env, $dataset_id):Collection{
