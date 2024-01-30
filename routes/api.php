@@ -48,14 +48,6 @@ Route::get('/1/{env}/trevor/categories', [TrevorCategoryAPI::class, 'getCategori
 
 Route::get('/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCategory']);
 
-/** pulse survey api endpoints
- * the first endpoint returns all pulse questions
- * the second endpoint gets the pulse question and its results
- */
-
-Route::get('/1/{env}/pulse/questions', [PulseQuestionAPI::class, 'getPulseQuestions']);
-
-Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQuestion']);
 
 /***
  * 
