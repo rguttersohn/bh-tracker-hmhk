@@ -117,7 +117,7 @@ class OMHDataAPI extends Controller
 
         $status = $this->getSetStatusToQuery($env);
 
-        $county_map = json_decode(file_get_contents(public_path('/Counties_shoreline.json')));
+        $county_map = json_decode(file_get_contents(public_path('/maps/Counties_Shoreline.json')));
 
     
             $data = DB::table('omh_data')
