@@ -67,7 +67,7 @@ Route::get('/1/{env}/pulse/questions/{id}', [PulseQuestionAPI::class, 'getPulseQ
  * 
  */
 
-Route::get('app/1/{env}/omh/datasets', [OMHDataAPI::class, 'getOMHDatasets']);
+Route::get('app/1/{env}/omh/datasets', [OMHDataAPI::class, 'getDatasets']);
 Route::get('app/1/{env}/omh/datasets/{dataset_id}', [OMHDataAPI::class, 'getData']);
 Route::get('app/1/{env}/omh/datasets/{dataset_id}/state', [OMHDataAPI::class, 'getStateData']);
 Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionData']);

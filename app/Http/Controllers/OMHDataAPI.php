@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OMHData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OMHDatasets;
@@ -53,6 +52,7 @@ class OMHDataAPI extends Controller
     }
 
     public function getDataSets():Collection {
+
         $data = Cache::rememberForever('omhDatasets',fn()=>OMHDatasets::get(['id', 'name', 'description']));
         return $data;
     }
@@ -69,13 +69,17 @@ class OMHDataAPI extends Controller
 
         $status = $this->getSetStatusToQuery($env);
         
-        return DB::table('omh_data')
+        $data = Cache::rememberForever('omhStateData',function()use($status, $dataset_id){
+            return DB::table('omh_data')
             ->select('year', DB::raw('sum(capacity) as capacity'), DB::raw('sum(rate_per_k) as rate_per_k'))
             ->groupBy('year')
             ->join('omh_counties as oc', 'county_id','=', 'oc.id')
             ->where([['oc.name', '=', 'All'],['dataset_id',$dataset_id]])
             ->whereIn('publication_status', $status)
             ->get();
+        });
+
+        return $data;
 
         
     }
@@ -115,36 +119,43 @@ class OMHDataAPI extends Controller
 
         $county_map = json_decode(file_get_contents(public_path('/maps/Counties_shoreline.json')));
 
-        $data = DB::table('omh_data')
-            ->select('year','or.name as region','or.id as region_id','oc.id as county_id','oc.name as county','capacity','rate_per_k',)
-            ->join('omh_regions as or', 'region_id', '=', 'or.id')
-            ->join('omh_counties as oc', 'county_id','=', 'oc.id')
-            ->whereIn('publication_status', $status)
-            ->where([['oc.name', '!=', 'All'],['dataset_id', $dataset_id],['year', $year]])
-            ->get()
-            ->toArray();
+    
+            $data = DB::table('omh_data')
+                ->select('year','or.name as region','or.id as region_id','oc.id as county_id','oc.name as county','capacity','rate_per_k',)
+                ->join('omh_regions as or', 'region_id', '=', 'or.id')
+                ->join('omh_counties as oc', 'county_id','=', 'oc.id')
+                ->whereIn('publication_status', $status)
+                ->where([['oc.name', '!=', 'All'],['dataset_id', $dataset_id],['year', $year]])
+                ->get()
+                ->toArray();
         
-        if(!$data):
-            return [];
-        endif;
-
-        $county_map_merged = array_map(function($county)use($data){
-            array_map(function($d)use($county){
-                if($county->properties->NAME === $d->county):
-                    $county->properties->COUNTY_ID = $d->county_id;
-                    $county->properties->REGION_ID = $d->region_id;
-                    $county->properties->REGION = $d->region;
-                    $county->properties->CAPACITY = $d->capacity;
-                    $county->properties->RATE_PER_K = $d->rate_per_k;
-                    $county->properties->YEAR = $d->year;
-
+                if(!$data):
+                    return [];
                 endif;
-                return $d;
-            }, $data);
-            return $county;
-        }, $county_map->features);
 
-        return $county_map_merged;
+                $county_map_merged = array_map(function($county)use($data){
+                    
+                    array_map(function($d)use($county){
+                        if($county->properties->NAME === $d->county):
+                            $county->properties->COUNTY_ID = $d->county_id;
+                            $county->properties->REGION_ID = $d->region_id;
+                            $county->properties->REGION = $d->region;
+                            $county->properties->CAPACITY = $d->capacity;
+                            $county->properties->RATE_PER_K = $d->rate_per_k;
+                            $county->properties->YEAR = $d->year;
+
+                        endif;
+
+                        return $d;
+
+                    }, $data);
+
+                    return $county;
+
+                }, $county_map->features);
+
+            return $county_map_merged;
+
         
     }
 
