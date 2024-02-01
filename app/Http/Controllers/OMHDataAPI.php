@@ -2,48 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OMHDatasets;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Traits\CacheKey;
 
 
 class OMHDataAPI extends Controller
 {
+    use CacheKey;
 
-    protected array $allowed_queries = [
-        'county_id' => 'county_id',
-        'region_id' => 'region_id',
-        'year' => 'year',
-    ];
-
-    protected array $valid_queries = [];
     
- 
-    public function __construct(Request $request)
-    {   
-        /**run these methods on instantiation */
-        $this->setValidQueries($request->all());
-    }
-    /** 
-     * checks the url queries against the the allowed queriest list
-     */
-    protected function setValidQueries(array $queries):void {
-        
-        
-        foreach($queries as $key => $value):
-
-            if(isset($this->allowed_queries[$key])):
-
-                $this->valid_queries[$key] = $value;
-            
-            endif;
-
-        endforeach;
-
-    }
-
+  
     public function getSetStatusToQuery($env):array{
 
         return match($env){
@@ -52,10 +23,22 @@ class OMHDataAPI extends Controller
         };
     }
 
-    public function getDataSets():Collection {
+    public function getDataSets($env):Collection | array {
+        $cache_key = static::setOMHKey($env,);
 
-        return OMHDatasets::get(['id', 'name', 'description']);
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data):
+
+            return json_decode($cached_data);
+
+        endif;
         
+        $data = OMHDatasets::get(['id', 'name', 'description']);
+        
+        Redis::set('omh:datasets', json_encode($data));
+
+        return $data;
     }
 
     public function getData($env, $dataset_id):Collection{
@@ -66,57 +49,138 @@ class OMHDataAPI extends Controller
         ->get(['id', 'name', 'description']);
     }
 
-    public function getStateData($env, $dataset_id):Collection{
+    public function getStateData($env, $dataset_id):Collection | array{
 
         $status = $this->getSetStatusToQuery($env);
+
+        $cache_key = static::setOMHKey($env, $dataset_id, 'state');
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data){
+            
+            return json_decode($cached_data);
+        }
         
-        $data = Cache::rememberForever('omhStateData',function()use($status, $dataset_id){
-            return DB::table('omh_data')
-            ->select('year', DB::raw('sum(capacity) as capacity'), DB::raw('sum(rate_per_k) as rate_per_k'))
-            ->groupBy('year')
+        $data = DB::table('omh_data')
+            ->select('year', 'or.name as region', 'or.id as region_id', 'capacity', 'rate_per_k')
             ->join('omh_counties as oc', 'county_id','=', 'oc.id')
-            ->where([['oc.name', '=', 'All'],['dataset_id',$dataset_id]])
+            ->join('omh_regions as or', 'region_id', '=', 'or.id')
+            ->where([['oc.name', '=', 'All'],['or.name', '=', 'All'],['dataset_id',$dataset_id]])
             ->whereIn('publication_status', $status)
             ->get();
-        });
+
+        Redis::set($cache_key, json_encode($data));
 
         return $data;
 
-        
     }
 
-    public function getRegionData($env, $dataset_id):Collection{
-        $queries = $this->valid_queries;
+    public function getRegionsData($env, $dataset_id):Collection | array{
         $status = $this->getSetStatusToQuery($env);
-        return DB::table('omh_data')->select('year','or.name as region','or.id as region_id','capacity','rate_per_k',)
+        $cache_key = static::setOMHKey($env, $dataset_id, 'regions');
+
+        $cached_data = Redis::get($cache_key);
+        
+        if($cached_data){
+            return json_decode($cached_data);
+        }
+
+        $data = DB::table('omh_data')->select('year','or.name as region','or.id as region_id','capacity','rate_per_k',)
             ->join('omh_regions as or', 'region_id', '=', 'or.id')
             ->join('omh_counties as oc', 'county_id','=', 'oc.id')
             ->where([['oc.name','All'],['dataset_id', $dataset_id]])
             ->whereIn('publication_status', $status)
-            ->when(isset($queries['year']), fn($query)=>$query->where('year', '=', $queries['year']))
-            ->when(isset($queries['region_id']), fn($query)=>$query->where('or.id', '=', $queries['region_id']))
-            ->get();     
+            ->get();
+        
+        Redis::set($cache_key, json_encode($data));
+            
+        return $data;
+    }
+
+    public function getRegionData($env, $dataset_id, $region_id):Collection | array{
+        
+        $status = $this->getSetStatusToQuery($env);
+        $cache_key = static::setOMHKey($env, $dataset_id, 'regions', $region_id);
+
+        $cached_data = Redis::get($cache_key);
+        
+        if($cached_data){
+            return json_decode($cached_data);
+        }
+
+        $data = DB::table('omh_data')->select('year','or.name as region','or.id as region_id','capacity','rate_per_k',)
+            ->join('omh_regions as or', 'region_id', '=', 'or.id')
+            ->join('omh_counties as oc', 'county_id','=', 'oc.id')
+            ->where([['oc.name','All'],['dataset_id', $dataset_id],['region_id', $region_id]])
+            ->whereIn('publication_status', $status)
+            ->get();
+        
+        Redis::set($cache_key, json_encode($data));
+            
+        return $data;
     }
    
 
-    public function getCountyData($env, $dataset_id):Collection{
-        $queries = $this->valid_queries;
+    public function getCountiesData($env, $dataset_id):Collection | array{
 
         $status = $this->getSetStatusToQuery($env);
-        return DB::table('omh_data')
-        ->select('year','or.name as region','or.id as region_id','oc.id as county_id','oc.name as county','capacity','rate_per_k',)
+        $cache_key = static::setOMHKey($env, $dataset_id, 'counties');
+
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data):
+            return json_decode($cached_data);
+        endif;
+
+        $data = DB::table('omh_data')
+            ->select('year','or.name as region','or.id as region_id','oc.id as county_id','oc.name as county','capacity','rate_per_k',)
             ->join('omh_regions as or', 'region_id', '=', 'or.id')
             ->join('omh_counties as oc', 'county_id','=', 'oc.id')
             ->whereIn('publication_status', $status)
             ->where([['oc.name', '!=', 'All'],['dataset_id', $dataset_id]])
-            ->when(isset($queries['year']), fn($query)=>$query->where('year', '=', $queries['year']))
-            ->when(isset($queries['county_id']), fn($query)=> $query->where('oc.id', '=', $queries['county_id']))
             ->get();
+
+        Redis::set($cache_key, json_encode($data));
+
+        return $data;
+    }
+
+    public function getCountyData($env, $dataset_id, $county_id):Collection | array{
+
+        $status = $this->getSetStatusToQuery($env);
+        $cache_key = static::setOMHKey($env, $dataset_id, 'counties', $county_id);
+
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data):
+            return json_decode($cached_data);
+        endif;
+
+        $data = DB::table('omh_data')
+            ->select('year','or.name as region','or.id as region_id','oc.id as county_id','oc.name as county','capacity','rate_per_k',)
+            ->join('omh_regions as or', 'region_id', '=', 'or.id')
+            ->join('omh_counties as oc', 'county_id','=', 'oc.id')
+            ->whereIn('publication_status', $status)
+            ->where([['dataset_id', $dataset_id],['county_id', $county_id]])
+            ->get();
+
+        Redis::set($cache_key, json_encode($data));
+
+        return $data;
     }
 
     public function getCountyMapData($env, $dataset_id, $year):array{
 
         $status = $this->getSetStatusToQuery($env);
+
+        $cache_key = static::setOMHKey($env, $dataset_id, 'map', $year);
+
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data){
+
+            return json_decode($cached_data);
+        }
 
         $county_map = json_decode(file_get_contents(public_path('/maps/Counties_Shoreline.json')));
 
@@ -154,8 +218,10 @@ class OMHDataAPI extends Controller
                     return $county;
 
                 }, $county_map->features);
+        
+        Redis::set($cache_key, json_encode($county_map_merged));
 
-            return $county_map_merged;
+        return $county_map_merged;
 
         
     }

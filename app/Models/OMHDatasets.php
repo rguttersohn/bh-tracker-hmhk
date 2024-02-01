@@ -5,13 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Traits\ClearCache;
 
 class OMHDatasets extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearCache;
 
     protected $table = 'omh_datasets';
+
+    public static $cache_key = 'omh:datasets';
+
+    public static function boot(){
+        
+        parent::boot();
+
+        static::clearCache('omh:datasets');
+
+    }
 
     private function selectFields():array{
         return ['dataset_id','year','rate_per_k','capacity','county_id','region_id'];

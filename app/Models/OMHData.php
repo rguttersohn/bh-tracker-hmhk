@@ -5,19 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Traits\ClearCache;
 
 
 class OMHData extends Model
 {
     
-    use HasFactory;
+    use HasFactory, ClearCache;
 
     protected $table = 'omh_data';
     
     protected $attributes = [
         'publication_status' => 'draft',
     ];
+
+
+    public static function boot(){
+        
+        parent::boot();
+
+        static::clearCache("omh:datasets:*");
+        // static::clearCache('omh:datasets:*:regions');
+        // static::clearCache('omh:datasets:*:regions:*');
+        // static::clearCache('omh:datasets:*:counties');
+        // static::clearCache('omh:datasets:*:counties:*');
+        // static::clearCache('omh:datasets:*:map:*');
+
+    }
 
    
     public function selectFields():array{

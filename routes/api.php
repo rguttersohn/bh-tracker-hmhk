@@ -62,7 +62,9 @@ Route::get('/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCat
 Route::get('app/1/{env}/omh/datasets', [OMHDataAPI::class, 'getDatasets']);
 Route::get('app/1/{env}/omh/datasets/{dataset_id}', [OMHDataAPI::class, 'getData']);
 Route::get('app/1/{env}/omh/datasets/{dataset_id}/state', [OMHDataAPI::class, 'getStateData']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionData']);
-Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties', [OMHDataAPI::class, 'getCountyData'] );
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions', [OMHDataAPI::class, 'getRegionsData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/regions/{region_id}', [OMHDataAPI::class, 'getRegionData']);
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties', [OMHDataAPI::class, 'getCountiesData'] );
+Route::get('app/1/{env}/omh/datasets/{dataset_id}/counties/{county_id}', [OMHDataAPI::class, 'getCountyData'] );
 Route::get('app/1/{env}/omh/datasets/{dataset_id}/map/{year}', [OMHDataAPI::class, 'getCountyMapData'] );
 
