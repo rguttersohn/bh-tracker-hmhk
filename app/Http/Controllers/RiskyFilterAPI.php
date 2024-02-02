@@ -11,7 +11,7 @@ class RiskyFilterAPI extends Controller
 
     use CacheKey;
 
-    protected function getStagingFilters(string $id){
+    protected function getStagingFilters(string $id):array{
 
         $race_query = DB::table('race_constraints')->
             select('race_constraints.id', 'slug','label', 'explanation')
@@ -52,7 +52,7 @@ class RiskyFilterAPI extends Controller
         ];
     }
 
-    protected function getProductionFilters(string $id){
+    protected function getProductionFilters(string $id):array{
 
         $race_query = DB::table('race_constraints')->
             select('race_constraints.id', 'slug','label', 'explanation')
@@ -91,7 +91,7 @@ class RiskyFilterAPI extends Controller
         ];
     }
 
-    public function getFilters(string $env, string $id):array{
+    public function getFilters(string $env, string $id):array | object{
         $cache_key = static::setRiskKeys($env, $id, 'filters');
 
         $cached_data = Redis::get($cache_key);
