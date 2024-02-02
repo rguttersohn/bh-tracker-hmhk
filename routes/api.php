@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RiskyQuestionAPI;
 use App\Http\Controllers\TrevorCategoryAPI;
-use App\Http\Controllers\PulseQuestionAPI;
 use App\Http\Controllers\RiskyFilterAPI;
 use App\Http\Controllers\RiskyResponseAPI;
 use App\Http\Controllers\OMHDataAPI;
@@ -33,20 +32,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  * The fourth endpoint returns returns responses for the question
 */
 
-Route::get('/1/{env}/yrbss/questions/', [RiskyQuestionAPI::class, 'getQuestions']);
+Route::get('app/1/{env}/yrbss/questions/', [RiskyQuestionAPI::class, 'getQuestions']);
 
-Route::get('/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuestion']);
+Route::get('app/1/{env}/yrbss/questions/{id}', [RiskyQuestionAPI::class, 'getQuestion']);
 
-Route::get('/1/{env}/yrbss/questions/{id}/filters', [RiskyFilterAPI::class, 'getFilters']);
+Route::get('app/1/{env}/yrbss/questions/{id}/filters', [RiskyFilterAPI::class, 'getFilters']);
 
-Route::get('/1/{env}/yrbss/questions/{id}/responses', [RiskyResponseAPI::class, 'getResponses']);
+Route::get('app/1/{env}/yrbss/questions/{id}/responses', [RiskyResponseAPI::class, 'getResponses']);
 
 
 /** trevor project end points */
 
-Route::get('/1/{env}/trevor/categories', [TrevorCategoryAPI::class, 'getCategories']);
+Route::get('app/1/{env}/trevor/categories', [TrevorCategoryAPI::class, 'getCategories']);
 
-Route::get('/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCategory']);
+Route::get('app/1/{env}/trevor/categories/{id}', [TrevorCategoryAPI::class, 'getCategory']);
 
 
 /***

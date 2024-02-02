@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Redis;
 
 trait ClearCache {
 
-    public static function deleteKeys(array $keys):void{
+    private static function deleteKeys(array $keys):void{
         
         $redis = new \Redis();
-        $prefix = $redis->getOption(\Redis::OPT_PREFIX); // keys already have prefix, so we clear until delete finish.
+        $prefix = $redis->getOption(\Redis::OPT_PREFIX);
         $redis->setOption(\Redis::OPT_PREFIX, '');
         $redis->connect('redis');
 
@@ -22,7 +22,7 @@ trait ClearCache {
 
     }
     
-    public static function clearCache(string $key_pattern):void{
+    private static function clearCache(string $key_pattern):void{
         
         if (empty($key_pattern)) { 
             return;

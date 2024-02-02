@@ -12,6 +12,15 @@ class OMHCounties extends Model
 
     protected $table = 'omh_counties';
 
+    public static function boot(){
+        
+        parent::boot();
+
+        static::clearCache("*omh*");
+      
+
+    }
+
     public function omhData():HasMany{
         return $this->hasMany(OMHData::class);
     }

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Traits\CacheKey;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class RiskyFilterAPI extends Controller
 {   
 
-      
+    use CacheKey;
+
     protected function getStagingFilters(string $id){
 
         $race_query = DB::table('race_constraints')->
@@ -90,12 +92,23 @@ class RiskyFilterAPI extends Controller
     }
 
     public function getFilters(string $env, string $id):array{
+        $cache_key = static::setRiskKeys($env, $id, 'filters');
 
-        return match($env){
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data):
+            return json_decode($cached_data);
+        endif;
+
+        $filters = match($env){
             'production' => $this->getProductionFilters($id),
             'staging' => $this->getStagingFilters($id),
             default => [],
          };
+
+         Redis::set($cache_key, json_encode($filters));
+
+         return $filters;
     }
 
 }

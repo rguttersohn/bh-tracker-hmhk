@@ -24,12 +24,8 @@ class OMHData extends Model
         
         parent::boot();
 
-        static::clearCache("omh:datasets:*");
-        // static::clearCache('omh:datasets:*:regions');
-        // static::clearCache('omh:datasets:*:regions:*');
-        // static::clearCache('omh:datasets:*:counties');
-        // static::clearCache('omh:datasets:*:counties:*');
-        // static::clearCache('omh:datasets:*:map:*');
+        static::clearCache("*omh*");
+      
 
     }
 

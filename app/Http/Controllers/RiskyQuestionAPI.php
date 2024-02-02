@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\CacheKey;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Traits\InvalidMessages;
 
 
 class RiskyQuestionAPI extends Controller
 {
 
-    use InvalidMessages;
+    use InvalidMessages, CacheKey;
 
     protected array $selection = ['id','question','explanation','source_url','source_notes'];
 
@@ -49,25 +51,45 @@ class RiskyQuestionAPI extends Controller
 
     public function getQuestions(string $env):array{
         
+        $cache_key = static::setRiskKeys($env);
+
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data){
+
+            return json_decode($cached_data);
+        }
+
         $response= match($env){
             'staging' => $this->stagingQuestionsQuery(),
             'production' => $this->productionQuestionsQuery(),
             default => $this->getInvalidMessage($env),
         };
 
+        Redis::set($cache_key,json_encode($response));
+
         return $response;
     }
 
 
-    public function getQuestion(string $env, string $id, Request $request):array{
+    public function getQuestion(string $env, string $id):array{
 
         /** Determine the query to run based ont the env */
+        $cache_key = static::setRiskKeys($env, $id);
+
+        $cached_data = Redis::get($cache_key);
+
+        if($cached_data):
+            return json_decode($cached_data);
+        endif;
 
         $question_query = match($env){
             'staging' => $this->stagingQuestionQuery($id),
             'production' => $this->productionQuestionQuery($id),
             default => $this->getInvalidMessage($env)
         };
+
+        Redis::set($cache_key, json_encode(['question' => $question_query]));
             
         return [
             'question' => $question_query,

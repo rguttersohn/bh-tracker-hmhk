@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ClearCache;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RiskyResponse extends Model
 {
-    use HasFactory;
+    use HasFactory, ClearCache;
 
     
     protected $table = 'risky_responses';
@@ -16,6 +17,14 @@ class RiskyResponse extends Model
     protected $attributes = [
         'publication_status' => 'draft',
     ];
+
+    public static function boot(){
+        
+        parent::boot();
+
+        static::clearCache('*yrbss*');
+
+    }
 
     public function risky_question(): BelongsTo {
         return $this->belongsTo(RiskyQuestion::class);

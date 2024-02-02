@@ -19,7 +19,7 @@ class OMHDatasets extends Model
         
         parent::boot();
 
-        static::clearCache('omh:datasets');
+        static::clearCache('*omh*');
 
     }
 

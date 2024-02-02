@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\CacheKey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class RiskyResponseAPI extends Controller
 {
+    use CacheKey;
+
     protected array $selections = [
         'rr.id',
         'rr.year', 
@@ -159,12 +163,22 @@ class RiskyResponseAPI extends Controller
     }
 
     public function getResponses( string $env, string $id):array {
-         
+
+        $cache_query = static::setRiskKeys($env, $id, 'responses', $this->valid_queries);
+
+        $cached_data = Redis::get($cache_query);
+
+        if($cached_data):
+            return json_decode($cached_data);
+        endif;
+
         $responses_query = match($env){
             'staging' => $this->stagingResponsesQuery($id),
             'production' => $this->productionResponsesQuery($id),
             default => []
         };
+
+        Redis::set($cache_query, json_encode($responses_query));
 
         return $responses_query;
     
