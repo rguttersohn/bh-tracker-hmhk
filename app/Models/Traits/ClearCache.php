@@ -11,7 +11,6 @@ trait ClearCache {
         $redis = new \Redis();
         $prefix = $redis->getOption(\Redis::OPT_PREFIX);
         $redis->setOption(\Redis::OPT_PREFIX, '');
-        $redis->connect('redis');
 
         foreach($keys as $key){
             $redis->unlink($key);   
