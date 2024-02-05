@@ -19,9 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://localhost:3000', 'http://healthymindshealthykids.test'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['https:\/\/(.*\.)?healthymindshealthykids.org|https:\/\/healthymindshealthykids.org'],
 
     'allowed_headers' => ['*'],
 
