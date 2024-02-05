@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => ['http://localhost:3000', 'http://healthymindshealthykids.test'],
 
-    'p' => ['https:/\/\/(.*\.)?healthymindshealthykids.org|https:\/\/healthymindshealthykids.org/'],
+    'allowed_origins_patterns' => ['https://(.*\.)?healthymindshealthykids.org|https://healthymindshealthykids.org'],
 
     'allowed_headers' => ['*'],
 
