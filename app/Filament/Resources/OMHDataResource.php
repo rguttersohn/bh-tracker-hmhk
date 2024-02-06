@@ -30,9 +30,11 @@ class OMHDataResource extends Resource
 
     protected static ?string $navigationGroup = 'OMH Data';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $label = "Data";
+
+
 
     public static function form(Form $form): Form
     {

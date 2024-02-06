@@ -24,6 +24,12 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->navigationGroups([
+                'OMH Data',
+                'Youth Risk Behavior Survey',
+                'Trevor Project',
+                'Filament Shield',
+            ])
             ->id('admin')
             ->path('/')
             ->login()
@@ -57,6 +63,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => 'rgb(34,37,114)',
                 'gray' => '#15803d',
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);
+            ;
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-
+use App\Models\RiskyQuestion;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class RiskyQuestionPolicy
 {
     use HandlesAuthorization;
 
@@ -18,18 +18,19 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_user');
+        return $user->can('view_any_risky::question');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function view(User $user): bool
+    public function view(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('view_user');
+        return $user->can('view_risky::question');
     }
 
     /**
@@ -40,29 +41,31 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_user');
+        return $user->can('create_risky::question');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function update(User $user): bool
+    public function update(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('update_user');
+        return $user->can('update_risky::question');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function delete(User $user): bool
+    public function delete(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('delete_user');
+        return $user->can('delete_risky::question');
     }
 
     /**
@@ -73,18 +76,19 @@ class UserPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_user');
+        return $user->can('delete_any_risky::question');
     }
 
     /**
      * Determine whether the user can permanently delete.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function forceDelete(User $user): bool
+    public function forceDelete(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('force_delete_user');
+        return $user->can('force_delete_risky::question');
     }
 
     /**
@@ -95,18 +99,19 @@ class UserPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_user');
+        return $user->can('force_delete_any_risky::question');
     }
 
     /**
      * Determine whether the user can restore.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function restore(User $user): bool
+    public function restore(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('restore_user');
+        return $user->can('restore_risky::question');
     }
 
     /**
@@ -117,18 +122,19 @@ class UserPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_user');
+        return $user->can('restore_any_risky::question');
     }
 
     /**
-     * Determine whether the user can bulk restore.
+     * Determine whether the user can replicate.
      *
      * @param  \App\Models\User  $user
+     * @param  \App\Models\RiskyQuestion  $riskyQuestion
      * @return bool
      */
-    public function replicate(User $user): bool
+    public function replicate(User $user, RiskyQuestion $riskyQuestion): bool
     {
-        return $user->can('replicate_user');
+        return $user->can('replicate_risky::question');
     }
 
     /**
@@ -139,6 +145,7 @@ class UserPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_user');
+        return $user->can('reorder_risky::question');
     }
+
 }
