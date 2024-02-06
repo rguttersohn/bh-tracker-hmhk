@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 
 
 class UserResource extends Resource
@@ -32,7 +33,13 @@ class UserResource extends Resource
                 ->schema([
                     TextInput::make('name')->required(),
                     TextInput::make('email')->email()->required(),
-                    TextInput::make('password')->password()->required()->columnSpan(2),
+                    TextInput::make('password')->password()->required()->columnSpan(2)->visibleOn('create'),
+                    Select::make('roles')
+                        ->relationship('roles', 'name')
+                        ->multiple()
+                        ->preload()
+                        ->searchable()
+                        ->required()
                 ])->columns(2),
             ]);
     }
