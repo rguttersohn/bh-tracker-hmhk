@@ -65,7 +65,8 @@ class AdminPanelProvider extends PanelProvider
                 'gray' => '#15803d',
             ])
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin::make()
             ]);
             ;
     }
