@@ -30,10 +30,10 @@ class OMHDatasetsResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name'),
-                TextArea::make('description'),
-                TextArea::make('rate_description'),
-                TextArea::make('capacity_description')
+                TextInput::make('name')->required(),
+                TextArea::make('description')->required(),
+                TextArea::make('rate_description')->required(),
+                TextArea::make('capacity_description')->required()
             ]);
     }
 
