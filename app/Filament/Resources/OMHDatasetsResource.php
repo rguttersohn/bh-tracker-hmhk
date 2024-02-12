@@ -31,7 +31,9 @@ class OMHDatasetsResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
-                TextArea::make('description')
+                TextArea::make('description'),
+                TextArea::make('rate_description'),
+                TextArea::make('capacity_description')
             ]);
     }
 
@@ -39,6 +41,7 @@ class OMHDatasetsResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id'),
                 TextColumn::make('name')
             ])
             ->filters([

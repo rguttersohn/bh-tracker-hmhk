@@ -34,7 +34,7 @@ class OMHDataAPI extends Controller
 
         endif;
         
-        $data = OMHDatasets::get(['id', 'name', 'description']);
+        $data = OMHDatasets::get(['id', 'name', 'description', 'rate_description', 'capacity_description']);
         
         Redis::set('omh:datasets', json_encode($data));
 
@@ -43,10 +43,7 @@ class OMHDataAPI extends Controller
 
     public function getData($env, $dataset_id):Collection{
         return OMHDatasets::where('id',$dataset_id)
-        ->with('omhData', fn($query)=>$query
-        ->with('county')->with('region')
-        ->whereIn('publication_status', $this->getSetStatusToQuery($env)))
-        ->get(['id', 'name', 'description']);
+        ->get(['id', 'name', 'description', 'rate_description', 'capacity_description']);
     }
 
     public function getStateData($env, $dataset_id):Collection | array{
